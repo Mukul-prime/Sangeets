@@ -1,9 +1,7 @@
 package com.example.SanGeets.Service;
 
 import com.example.SanGeets.DAO.*;
-import com.example.SanGeets.DTO.Request.PlayListUpdate;
-import com.example.SanGeets.DTO.Request.UserEmailChange;
-import com.example.SanGeets.DTO.Request.UserRequest;
+import com.example.SanGeets.DTO.Request.*;
 import com.example.SanGeets.DTO.Response.UserResponse;
 import com.example.SanGeets.Exceptions.*;
 import com.example.SanGeets.Model.*;
@@ -11,6 +9,7 @@ import com.example.SanGeets.Utility.Enums.Role;
 import com.example.SanGeets.Utility.Transformers.UserTransformer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -27,10 +26,11 @@ public class UserService {
     private final StateDAO stateDAO;
     private final SongDAO songDAO;
     private final PlayListSongsDAO playListSongsDAO;
+    private final PasswordEncoder passwordEncoder;
     private final PlayListDAO playListDAO;
 
 
-    public UserResponse createUser(UserRequest userRequest) {
+    public String createUser(UserRequest userRequest) {
         User user = userDAO.findByEmail(userRequest.getEmail());
         log.info(String.valueOf(userRequest));
         if (user != null) {
@@ -54,37 +54,49 @@ public class UserService {
 
         User newUser = UserTransformer.userRequestToUser(userRequest);
         newUser.setRole(Role.USER);
+        newUser.setPasswordHash(passwordEncoder.encode(userRequest.getPassword()));
         newUser.setCountry(country);
         newUser.setState(state);
         newUser.setLanguage(language);
         User a = userDAO.save(newUser);
-        return UserTransformer.userRequestToUserResponse(a);
+        return "Created";
 
 
     }
 
-    public String changeEmail(String email) {
+    public String changeEmail(String email,UpdateEmail updateEmail) {
         User user = userDAO.findByEmail(email);
         if (user == null) {
             throw new UserNotfound("User not created ");
 
         }
-        user.setEmail(email);
+        user.setEmail(updateEmail.getEmail());
         userDAO.save(user);
         return "Updated emails";
 
     }
 
 
-    public String changePassword(UserEmailChange userEmailChange) {
-        User user = userDAO.findByEmail(userEmailChange.getEmail());
+    public String changePassword(String email ,UserEmailChange userEmailChange) {
+        User user = userDAO.findByEmail(email);
         if (user == null) {
             throw new UserNotfound("User not created ");
         }
 
-        user.setPasswordHash(userEmailChange.getPassword());
+        user.setPasswordHash(passwordEncoder.encode(userEmailChange.getPassword()));
         userDAO.save(user);
         return "Updated passwords";
+    }
+
+    public String changeName(String email, ChangeNamesRequest changeNamesRequest){
+        User user = userDAO.findByEmail(email);
+        if (user == null) {
+            throw new UserNotfound("User not created ");
+        }
+        user.setName(changeNamesRequest.getUserName());
+        userDAO.save(user);
+        return "Updated name";
+
     }
 
 
@@ -108,6 +120,9 @@ public class UserService {
 
         return "Removed";
     }
+
+
+
 
 
 

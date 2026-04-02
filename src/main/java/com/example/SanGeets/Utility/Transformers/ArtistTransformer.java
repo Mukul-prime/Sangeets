@@ -11,7 +11,7 @@ public class ArtistTransformer {
         return Artist.builder()
                 .artistName(artistRequest.getArtistName())
                 .email(artistRequest.getEmail())
-                .passwordHash(artistRequest.getPassword())
+
                 .bio(artistRequest.getBio())
                 .country(artistRequest.getCountry())
 //                .coverImage(artistRequest.getCoverImage().getBytes())

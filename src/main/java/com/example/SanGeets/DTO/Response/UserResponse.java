@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 public class UserResponse {
 
-    private String answer= "Success";
+
     private String name;
     private String email;
 }

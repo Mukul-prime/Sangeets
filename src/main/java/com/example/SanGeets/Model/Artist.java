@@ -1,12 +1,14 @@
 package com.example.SanGeets.Model;
 
 
+import com.example.SanGeets.Utility.Enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "artists")
@@ -15,6 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 public class Artist {
 
     @Id
@@ -42,8 +45,16 @@ public class Artist {
     @JoinColumn(name = "country_id")
     private Country country;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+
+    @CreatedDate
+    @Column(name = "created_date", nullable = false, updatable = false)
+    protected LocalDateTime createdDate;
 
     // One artist → many albums
     @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)

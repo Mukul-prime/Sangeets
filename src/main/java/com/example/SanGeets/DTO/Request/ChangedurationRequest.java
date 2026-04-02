@@ -6,8 +6,8 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
-public class UserEmailChange {
-//    private String email;
-    private String password;
+public class ChangedurationRequest {
+    private long id;
+
+    private long duration;
 }

@@ -7,7 +7,8 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class UserEmailChange {
-//    private String email;
+public class Loginrequest {
+
+    private String email;
     private String password;
 }

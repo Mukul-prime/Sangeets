@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/v1/Country")
 @Slf4j
@@ -31,6 +31,17 @@ public class CountryController {
         }catch (CountryAlreadyExist e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
+    }
+
+    @GetMapping("/Country")
+    public ResponseEntity<?> CountryS(){
+        return new ResponseEntity<>(countryService.getAllCountries(), HttpStatus.OK);
+    }
+
+    @GetMapping("/Country/id/{id}")
+    public ResponseEntity<?> getCountryById(@PathVariable int id){
+        log.info(String.valueOf(id));
+        return new ResponseEntity<>(countryService.getAllStates(id) ,HttpStatus.OK);
     }
 
 }

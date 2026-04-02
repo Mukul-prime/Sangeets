@@ -26,4 +26,8 @@ public class Country {
 //    @JsonManagedReference
     private List<State> states;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "adminid")
+    private Admin admin;
+
 }

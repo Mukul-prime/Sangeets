@@ -17,7 +17,8 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY )
+
     private Long userId;
 
     @Column(nullable = false)
@@ -61,4 +62,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PlayList> playlists;
+
+
+
 }

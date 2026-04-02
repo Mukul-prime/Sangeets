@@ -23,5 +23,9 @@ public class Language {
     @Column(unique = true,nullable = false)
     private String languageName;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "adminid")
+    private Admin admin;
+
 
 }

@@ -29,6 +29,10 @@ public class State {
 //    @JsonBackReference
     private Country country;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="adminid")
+    private Admin admin;
+
 
 
 }

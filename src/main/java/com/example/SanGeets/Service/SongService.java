@@ -2,9 +2,9 @@ package com.example.SanGeets.Service;
 
 
 //import com.example.SanGeets.Controller.DeletesongFromsRequest;
+
 import com.example.SanGeets.DAO.*;
-import com.example.SanGeets.DTO.Request.DeleteSongRequest;
-import com.example.SanGeets.DTO.Request.SongRequest;
+import com.example.SanGeets.DTO.Request.*;
 import com.example.SanGeets.DTO.Response.SongResponse;
 import com.example.SanGeets.Exceptions.*;
 import com.example.SanGeets.Model.Artist;
@@ -34,14 +34,11 @@ public class SongService {
     private final PlayListSongsDAO playListSongsDAO;
     private final AlbumSongIDDAO albumSongIDDAO;
 
-    public SongResponse createSong(SongRequest songRequest) throws IOException {
+    public SongResponse createSong(SongRequest songRequest, String email) throws IOException {
 
 
-        Artist artist = artistDAO.findById(songRequest.getArtistId())
-                .orElseThrow(() -> new ArtistNotFound(
-                        "Artist not found with id " + songRequest.getArtistId()
-                ));
-
+        Artist artist = artistDAO.findByEmail(email);
+        if (artist == null) throw new ArtistNotFound(email);
 
 
         Genre genre = genreDAO.findById(songRequest.getGenreid())
@@ -66,7 +63,6 @@ public class SongService {
         }
 
 
-
         if (songRequest.getAudio() != null && !songRequest.getAudio().isEmpty()) {
             MultipartFile audio = songRequest.getAudio();
             byte[] audioBytes = audio.getBytes();
@@ -79,7 +75,6 @@ public class SongService {
         song.setGenre(genre);
 
 
-
         Songs savedSong = songDAO.save(song);
 
 
@@ -88,25 +83,68 @@ public class SongService {
         return response;
     }
 
-//    Delete a Song By artist
-@Transactional
-public String artistRemoveSongs(DeleteSongRequest deleteSongRequest){
+    //    Delete a Song By artist
+    @Transactional
+    public String artistRemoveSongs(String email, DeleteSongRequest deleteSongRequest) {
 
-    Songs songs = songDAO.findById(deleteSongRequest.getSongId())
-            .orElseThrow(() -> new SongNotFound("Song Not Found"));
+        Artist artist = artistDAO.findByEmail(email);
+        if (artist == null) throw new ArtistNotFound(email);
 
-    // Security Check
-    if(!songs.getArtist().getId().equals(deleteSongRequest.getArtistId())){
-        throw new RuntimeException("You cannot delete this song");
+
+        Songs songs = songDAO.findById(deleteSongRequest.getSongId())
+                .orElseThrow(() -> new SongNotFound("Song Not Found"));
+
+        // Security Check
+        if (!songs.getArtist().getId().equals(deleteSongRequest.getArtistId())) {
+            throw new RuntimeException("You cannot delete this song");
+        }
+
+        playListSongsDAO.deleteBySong_Id(deleteSongRequest.getSongId());
+        albumSongIDDAO.deleteBySongs_Id(deleteSongRequest.getSongId());
+
+        songDAO.delete(songs);
+
+        return "Successfully removed your song";
     }
 
-    playListSongsDAO.deleteBySong_Id(deleteSongRequest.getSongId());
-    albumSongIDDAO.deleteBySongs_Id(deleteSongRequest.getSongId());
+    public String changeDuration(String email , ChangedurationRequest changedurationRequest){
+        Artist artist = artistDAO.findByEmail(email);
+        if (artist == null) throw new ArtistNotFound(email);
 
-    songDAO.delete(songs);
+        Songs songs = songDAO.findById(changedurationRequest.getId()).orElseThrow(() -> new SongNotFound("Song Not Found"));
+        songs.setDuration(changedurationRequest.getDuration());
+        songDAO.save(songs);
+        return "Successfully changed your duration";
+    }
 
-    return "Successfully removed your song";
-}
+    public String changetitle(String email , ChangesongTitle changesongTitle){
+        Artist artist = artistDAO.findByEmail(email);
+        if (artist == null) throw new ArtistNotFound(email);
+
+        Songs songs =  songDAO.findById(changesongTitle.getId()).orElseThrow(() -> new SongNotFound("Song Not Found"));
+        songs.setTitle(changesongTitle.getTitle());
+        songDAO.save(songs);
+        return "Successfully changed your title";
+    }
+
+    public String ChangeBanner(String email , ChangeBanner changeBanner) throws IOException {
+        Artist artist = artistDAO.findByEmail(email);
+        if (artist == null) throw new ArtistNotFound(email);
+
+        Songs songs = songDAO.findById(changeBanner.getId()).orElseThrow(() -> new SongNotFound("Song Not Found"));
+        if (changeBanner.getBanner() != null && !changeBanner.getBanner().isEmpty()) {
+            songs.setImage(changeBanner.getBanner().getBytes());
+        }
+        return "Successfully changed your banner";
+    }
+
+
+
+
+
+
+
+
 
 
 

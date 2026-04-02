@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/State")
 @Slf4j
+@CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class StateController {
 
@@ -37,6 +38,13 @@ public class StateController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
+
+    @GetMapping("/States")
+    public ResponseEntity<?> getAllStates(){
+        return new ResponseEntity<>(stateService.getAllStates(), HttpStatus.OK);
+    }
+
+
 
 
 

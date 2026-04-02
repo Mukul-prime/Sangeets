@@ -13,7 +13,7 @@ public class LanguageTransformer {
     }
 
     public static LanguageResponse laguageToLanguageResponse(Language language){
-        return LanguageResponse.builder()
+        return LanguageResponse.builder().languageId(language.getId())
                 .languageCode(language.getLanguageCode())
                 .languageName(language.getLanguageName())
                 .build();

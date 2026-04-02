@@ -10,6 +10,7 @@ import lombok.*;
 @Builder
 
 public class StateResponse {
+    private int id;
     private String stateName ;
 
     private String country;

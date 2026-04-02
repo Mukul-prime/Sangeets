@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -27,5 +30,21 @@ public class LanguageServiuce {
         Language language1 = LanguageTransformer.languageRequestToLanguage(languageRequest);
         Language language2 = languageDAO.save(language1);
         return LanguageTransformer.laguageToLanguageResponse(language2);
+    }
+
+    public List<LanguageResponse> getAllLanguage(){
+        List<Language> languages = languageDAO.findAll();
+        List<LanguageResponse> languageResponses = new ArrayList<>();
+        for (Language language : languages) {
+            LanguageResponse languageResponse = new LanguageResponse(
+                    language.getId(),
+                    language.getLanguageCode(),
+                    language.getLanguageName()
+            );
+            languageResponses.add(languageResponse);
+        }
+
+        return languageResponses;
+
     }
 }

@@ -15,6 +15,7 @@ public class StateTransformer {
 
     public static StateResponse stateToStateResponse(State state) {
         return StateResponse.builder()
+                .id(state.getStateId())
                 .stateName(state.getStateName())
                 .country(state.getCountry().getCountryname())
                 .build();

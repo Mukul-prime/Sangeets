@@ -11,12 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Builder
 public class SongRequest {
     private String title ;
-    private Long duration ;
-    private Long artistId;
+    private long duration ;
+//    private Long artistId;
     private Long genreid;
     private MultipartFile banner;
     private MultipartFile audio;
-
-
-
 }

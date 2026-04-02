@@ -25,7 +25,7 @@ public class Songs {
     @Column(nullable = false, unique = true)
     private String title;
 
-    private Long duration; // in seconds or milliseconds
+    private long duration; // in seconds or milliseconds
 
     /* ================= RELATIONSHIPS ================= */
 

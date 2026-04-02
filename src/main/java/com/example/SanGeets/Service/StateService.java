@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -40,5 +43,22 @@ public class StateService {
 
 
 
+    }
+
+
+    public List<StateResponse> getAllStates(){
+        List<State> states = stateDAO.findAll();
+        List<StateResponse> statesResponse = new ArrayList<>();
+        for(State state : states){
+            StateResponse response = new StateResponse(
+                    state.getStateId(),
+                    state.getStateName(),
+                    state.getCountry().getCountryname()
+
+
+            );
+            statesResponse.add(response);
+        }
+        return statesResponse;
     }
 }
