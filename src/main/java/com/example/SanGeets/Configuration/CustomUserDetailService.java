@@ -1,10 +1,13 @@
 package com.example.SanGeets.Configuration;
 
+import com.example.SanGeets.DAO.AdminDAO;
 import com.example.SanGeets.DAO.ArtistDAO;
 import com.example.SanGeets.DAO.UserDAO;
+import com.example.SanGeets.Model.Admin;
 import com.example.SanGeets.Model.Artist;
 import com.example.SanGeets.Model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +23,8 @@ public class CustomUserDetailService implements UserDetailsService {
     private final UserDAO userDAO;
     private final ArtistDAO artistDAO;
 
+    @Autowired public AdminDAO adminDAO;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userDAO.findByEmail(username);
@@ -33,8 +38,10 @@ public class CustomUserDetailService implements UserDetailsService {
         }
 
 
-
-
+        Admin admin = adminDAO.findByEmail(username);
+        if (admin != null) {
+            return buildUserDetails(admin.getEmail(), admin.getPassword(), admin.getRole().name());
+        }
         throw new UsernameNotFoundException("User not found with email: " + username);
     }
 

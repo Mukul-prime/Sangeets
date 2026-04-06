@@ -1,4 +1,18 @@
 package com.example.SanGeets.DTO.Request;
 
-public class AddnewSong {
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+
+public class AddnewSongRequest {
+    private String  playlistName;
+    private long songid;
+
 }

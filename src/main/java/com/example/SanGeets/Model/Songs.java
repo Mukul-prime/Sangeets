@@ -1,6 +1,7 @@
 package com.example.SanGeets.Model;
 
 
+import com.example.SanGeets.Utility.Enums.Types;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
@@ -37,6 +38,10 @@ public class Songs {
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
+    @Column(length = 100)
+    @Enumerated(EnumType.STRING)
+    private Types type;
+
     /* ================= MEDIA ================= */
 
     @Lob
@@ -48,4 +53,9 @@ public class Songs {
     @Column(nullable = false)
     @CreationTimestamp
     private LocalDateTime CratedAt;
+
+    @OneToOne(mappedBy = "songs",cascade = CascadeType.ALL)
+    private Thubnails thubnails;
+
+
 }

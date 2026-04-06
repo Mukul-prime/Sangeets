@@ -4,11 +4,13 @@ import com.example.SanGeets.DTO.Request.AddAlbumSongsRequest;
 import com.example.SanGeets.Exceptions.AlbumNotFound;
 import com.example.SanGeets.Exceptions.ArtistNotFound;
 import com.example.SanGeets.Exceptions.SongNotFound;
+import com.example.SanGeets.Exceptions.SongalreadyExistinPlaylist;
 import com.example.SanGeets.Service.AddSongService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -27,19 +29,24 @@ public class AddAlbumController {
 
 
     @PostMapping("/Albumsong")
-    public ResponseEntity<?> CreateAddsong(@RequestBody AddAlbumSongsRequest addAlbumSongsRequest){
+    public ResponseEntity<?> CreateAddsong(Authentication authentication, @RequestBody AddAlbumSongsRequest addAlbumSongsRequest){
         log.info("Adding songs to album");
-        log.info("ArtistID = {}", addAlbumSongsRequest.getArtistID());
+
         log.info("SongID   = {}", addAlbumSongsRequest.getSongID());
         log.info("AlbumID  = {}", addAlbumSongsRequest.getAlbumID());
 
         try{
-            String response = addSongService.CreateAddsong(addAlbumSongsRequest);
+            String email = authentication.getName();
+            String response = addSongService.CreateAddsong(email,addAlbumSongsRequest);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
-        catch (ArtistNotFound | SongNotFound | AlbumNotFound e){
+        catch (SongalreadyExistinPlaylist | SongNotFound | AlbumNotFound  e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
+
+
+
+
 
 }

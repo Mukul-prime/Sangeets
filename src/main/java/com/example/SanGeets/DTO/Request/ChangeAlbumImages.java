@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 @Setter
 
-public class ChangeAlbumImage
+public class ChangeAlbumImages
 {
     private String oldTitle;
     private MultipartFile newImage;

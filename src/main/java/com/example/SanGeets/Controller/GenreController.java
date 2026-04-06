@@ -11,6 +11,9 @@ import org.springframework.context.annotation.ReflectiveScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/v1/Genre")
@@ -20,10 +23,6 @@ public class GenreController {
 
     private final GenreService genreService;
 
-    @GetMapping("/")
-    public String welcome(){
-        return "Welcome to SanGeets!";
-    }
 
     @PostMapping("/")
     public ResponseEntity<?> createGenre(@RequestBody GenreRequest genreRequest){
@@ -35,6 +34,12 @@ public class GenreController {
         catch (GenreAlreadyExisit e){
             return new ResponseEntity<>(e.getMessage() ,HttpStatus.CONFLICT);
         }
+    }
+
+    @GetMapping("/")
+    public  List<GenreResponse> getAllGenre(){
+       List<GenreResponse> genreResponses = genreService.getallGenre();
+        return genreResponses;
     }
 
 }

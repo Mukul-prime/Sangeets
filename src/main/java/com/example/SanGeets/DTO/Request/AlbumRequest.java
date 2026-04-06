@@ -16,5 +16,5 @@ public class AlbumRequest {
 
     private String title;
     private MultipartFile image;
-    private Long artistId;
+
 }

@@ -11,7 +11,7 @@ import lombok.*;
 
 
 public class PlayListRequest {
-    private Long userId;
+
     private String title;
     private Long songId;
 

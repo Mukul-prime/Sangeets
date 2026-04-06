@@ -3,6 +3,7 @@ package com.example.SanGeets.Controller;
 
 
 import com.example.SanGeets.DTO.Response.LoginResponse;
+import com.example.SanGeets.Exceptions.AdminNotFound;
 import com.example.SanGeets.Exceptions.ArtistNotFound;
 import com.example.SanGeets.Exceptions.UserNotfound;
 import com.example.SanGeets.DTO.Request.Loginrequest;
@@ -27,7 +28,7 @@ public class AuthController {
 
         try{
             LoginResponse responseEntity = authService.login(loginrequest);
-            return new ResponseEntity<>(responseEntity, HttpStatus.OK);
+            return new ResponseEntity<>(responseEntity, HttpStatus.ACCEPTED);
         }
         catch (UserNotfound e){
             return new ResponseEntity<>("User not found", HttpStatus.UNAUTHORIZED);
@@ -35,17 +36,29 @@ public class AuthController {
         }
 
     }
-
-
-    @PostMapping("/Admin")
+    @PostMapping("/Artist")
     public ResponseEntity<?> loginArtist(@RequestBody Loginrequest loginrequest){
         try{
             System.out.println("Login Artist");
-            LoginResponse responseEntity = authService.loginAdmin(loginrequest);
-            return new ResponseEntity<>(responseEntity, HttpStatus.OK);
+            LoginResponse responseEntity = authService.loginartist(loginrequest);
+            return new ResponseEntity<>(responseEntity, HttpStatus.ACCEPTED);
         }
         catch (ArtistNotFound e){
             return new ResponseEntity<>("Artist not found", HttpStatus.UNAUTHORIZED);
         }
+    }
+    @PostMapping("/Admin")
+    public ResponseEntity<?> loginAdmin(@RequestBody Loginrequest loginrequest)
+    {
+        try
+        {
+            System.out.println("Login Admin");
+            LoginResponse loginResponse = authService.LoginAdmin(loginrequest);
+            return new ResponseEntity<>(loginResponse, HttpStatus.ACCEPTED);
+        }catch (AdminNotFound e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.UNAUTHORIZED);
+        }
+
+
     }
 }

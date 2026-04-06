@@ -2,13 +2,16 @@ package com.example.SanGeets.Service;
 
 
 
+import com.example.SanGeets.DAO.AdminDAO;
 import com.example.SanGeets.DAO.ArtistDAO;
 import com.example.SanGeets.DAO.UserDAO;
 import com.example.SanGeets.Configuration.JwtUtilitys;
+import com.example.SanGeets.Exceptions.AdminNotFound;
 import com.example.SanGeets.Exceptions.ArtistNotFound;
 import com.example.SanGeets.Exceptions.UserNotfound;
 import com.example.SanGeets.DTO.Request.Loginrequest;
 import com.example.SanGeets.DTO.Response.LoginResponse;
+import com.example.SanGeets.Model.Admin;
 import com.example.SanGeets.Model.Artist;
 import com.example.SanGeets.Model.User;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ public class AuthService {
     private final UserDAO userDAO;
     private final AuthenticationManager authenticationManager;
     private final ArtistDAO artistDAO;
+    private final AdminDAO adminDAO;
    @Autowired
    public JwtUtilitys jwtUtilitys;
 
@@ -45,7 +49,7 @@ public class AuthService {
         return LoginResponse.builder().token(key).email(user.getEmail()).role(String.valueOf(user.getRole())).build();
     }
 
-    public LoginResponse loginAdmin(Loginrequest loginrequest){
+    public LoginResponse loginartist(Loginrequest loginrequest){
         Artist artist =  artistDAO.findByEmail(loginrequest.getEmail());
         if(artist == null){
             throw new ArtistNotFound("Artist not found");
@@ -58,5 +62,20 @@ public class AuthService {
 
         return LoginResponse.builder().token(key).email(artist.getEmail()).role(String.valueOf(artist.getRole())).build();
 
+    }
+
+
+
+    public LoginResponse LoginAdmin(Loginrequest loginrequest){
+        Admin admin = adminDAO.findByEmail(loginrequest.getEmail());
+        if(admin == null){
+            throw new AdminNotFound("Admin not found");
+        }
+
+        Authentication authenticationManager1 = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginrequest.getEmail() , loginrequest.getPassword())
+        );
+        String key = jwtUtilitys.generateToken(String.valueOf(admin.getRole()), admin.getEmail());
+        return LoginResponse.builder().token(key).email(admin.getEmail()).role(String.valueOf(admin.getRole())).build();
     }
 }

@@ -9,5 +9,5 @@ import lombok.*;
 public class ChangedurationRequest {
     private long id;
 
-    private long duration;
+    private String duration;
 }

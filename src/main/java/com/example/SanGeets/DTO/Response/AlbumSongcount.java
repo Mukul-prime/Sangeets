@@ -1,4 +1,4 @@
-package com.example.SanGeets.DTO.Request;
+package com.example.SanGeets.DTO.Response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class AlbumTitleChangeRequest {
-    private String newTitle;
-    private String oldTitle;
+public class AlbumSongcount {
+    private String title ;
+    private long count;
 }

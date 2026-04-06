@@ -1,10 +1,7 @@
 package com.example.SanGeets.Controller;
 
 import com.example.SanGeets.DAO.SongDAO;
-import com.example.SanGeets.DTO.Request.ChangeBanner;
-import com.example.SanGeets.DTO.Request.ChangedurationRequest;
-import com.example.SanGeets.DTO.Request.ChangesongTitle;
-import com.example.SanGeets.DTO.Request.SongRequest;
+import com.example.SanGeets.DTO.Request.*;
 import com.example.SanGeets.DTO.Response.SongResponse;
 import com.example.SanGeets.Exceptions.*;
 import com.example.SanGeets.Model.Songs;
@@ -19,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -80,8 +78,8 @@ public class SongController {
                 .body(image);
     }
 
-    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE,path = "/")
-    public ResponseEntity<?> ChangeBanner(Authentication authentication, @RequestBody ChangeBanner changeBanner) {
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> ChangeBanner(Authentication authentication, @ModelAttribute ChangeBanner changeBanner) {
         log.debug("Changing banner to song");
         try{
             String email = authentication.getName();
@@ -109,16 +107,36 @@ public class SongController {
         log.debug("Changing duration to song");
         try{
             String email = authentication.getName();
+            System.out.println(3);
             String response = songService.changeDuration(email,changedurationRequest);
             return new ResponseEntity<>(response, HttpStatus.OK);
+
         }
         catch (ArtistNotFound | SongNotFound e) {
-            return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return  new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
 
+    @GetMapping("/CollectAllSong")
+    public ResponseEntity<?> songResponseList(){
+        List<SongResponse> ans = songService.songResponseList();
+        return new ResponseEntity<>(ans, HttpStatus.OK);
+    }
 
+
+    @PutMapping("/type")
+    public ResponseEntity<?> ChangeTyeps(Authentication authentication , @RequestBody Changetype changetype){
+        log.debug("Changing type to song");
+        try{
+            String email = authentication.getName();
+            String response = songService.ChangeSongType(email,changetype);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        catch (ArtistNotFound | SongNotFound e) {
+            return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
 
 
 

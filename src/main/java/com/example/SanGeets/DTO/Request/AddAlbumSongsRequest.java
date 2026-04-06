@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class AddAlbumSongsRequest {
 
-    private Long artistID;
+
     private Long songID;
     private Long albumID;
 }

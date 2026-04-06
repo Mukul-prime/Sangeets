@@ -56,8 +56,6 @@ public class User {
     @JoinColumn(name = "language_id")
     private Language language;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private PremiumType premiumType;
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

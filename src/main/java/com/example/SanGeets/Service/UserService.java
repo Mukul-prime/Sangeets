@@ -44,10 +44,10 @@ public class UserService {
 
         Country country = countryDAO.findById(userRequest.getCountryId())
                 .orElseThrow(() ->
-                        new CountryNotFounded("Country with id " + userRequest.getCountryId()));
+                        new CountryNotFounded("Country Not founded"));
 
         State state = stateDAO.findById(userRequest.getStateId()).orElseThrow(() ->
-                new StateNotFounded("State with id " + userRequest.getStateId()));
+                new StateNotFounded("State Not founded"));
 
         Language language = languageDAO.findById(Math.toIntExact(userRequest.getLanguageId()))
                 .orElseThrow(() -> new LanguageNotfound("language not founded "));

@@ -34,6 +34,7 @@ public class SecurityConfigs {
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .authorizeHttpRequests(auth ->
                         auth
+                                .requestMatchers("/api/v1/Song/CollectAllSong").permitAll()
                                 .requestMatchers( "/api/v1/Auth/**" ,"/api/v1/Users/**").permitAll()
                                 .requestMatchers("/api/v1/Country/**").permitAll()
                                 .requestMatchers("/api/v1/State/**").permitAll()
@@ -41,9 +42,12 @@ public class SecurityConfigs {
                                 .requestMatchers("/api/v1/Artist/**").permitAll()
                                 .requestMatchers("/api/v1/Admin/**").permitAll()
                                 .requestMatchers("/api/v1/Genre/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/v1/Song/**").permitAll()
+//                                .requestMatchers(HttpMethod.GET, "/api/v1/Song/**").permitAll()
                                 .requestMatchers("/api/v1/Song/**").hasRole("ARTIST")
-                                .anyRequest().authenticated()
+                                .requestMatchers("/api/v1/PlayList/**").hasRole("USER")
+                                .requestMatchers("/api/v1/Album/**").hasRole("ARTIST")
+                                .requestMatchers("/api/v1/Albumsong/**").hasRole("ARTIST")
+
 
 
                 )

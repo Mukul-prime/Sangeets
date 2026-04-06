@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -25,5 +28,15 @@ public class GenreService {
 
         Genre genre1 = genreDAO.save(GenreTransformer.genreRequestToGenre(genreRequest));
         return  GenreTransformer.genreToGenreResponse(genre1);
+    }
+
+
+    public List<GenreResponse> getallGenre(){
+        List<Genre> genres = genreDAO.findAll();
+        List<GenreResponse> genreResponses = new ArrayList<>();
+        for (Genre genre : genres) {
+            genreResponses.add(GenreTransformer.genreToGenreResponse(genre));
+        }
+        return genreResponses;
     }
 }
