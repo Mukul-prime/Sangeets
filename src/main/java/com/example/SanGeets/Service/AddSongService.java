@@ -21,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +33,6 @@ public class AddSongService {
     private final ArtistDAO  artistDAO;
     private final SongDAO songDAO;
     private final AlbumDAO albumDAO;
-    private final SongTransformer songTransformer;
 
 
 
